@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CalculaBet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #121212;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: white;
+    }
+
+    .container {
+      background-color: #1e1e1e;
+      padding: 30px 20px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 550px;
+      box-shadow: 0 0 30px rgba(0,255,150,0.1);
+      transition: 0.3s ease;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00ff99;
+      margin-bottom: 25px;
+      font-size: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background-color: #2a2a2a;
+      color: white;
+      font-size: 16px;
+      margin-bottom: 20px;
+      transition: 0.2s ease;
+    }
+
+    input[type="number"]:focus {
+      outline: 2px solid #00ff99;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      color: #00ff99;
+      font-weight: 600;
+    }
+
+    td input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: #2a2a2a;
+      color: white;
+      border: none;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .bet {
+      color: #00ffaa;
+      font-weight: bold;
+    }
+
+    .income {
+      color: #00ff99;
+      font-weight: bold;
+    }
+
+    .profit {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 10px;
+      color: #00ff99;
+      font-weight: 600;
+    }
+
+    button {
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #00ff99;
+      color: #121212;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #00cc7a;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      justify-content: center;
+    }
+
+    .button-group button {
+      flex: 1;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px 15px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      button {
+        font-size: 14px;
+      }
+
+      th, td {
+        padding: 6px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calcula Bet</h1>
+    <label for="totalBet">Total apostado</label>
+    <input type="number" id="totalBet" aria-label="Total apostado" />
+
+    <table>
+      <thead>
+        <tr>
+          <th>Valor</th>
+          <th>Odds</th>
+          <th>Lucro</th>
+          <th>Retorno</th>
+        </tr>
+      </thead>
+      <tbody id="bets">
+        <tr>
+          <td class="bet">0.00</td>
+          <td><input type="number" class="coef" value="6.84" /></td>
+          <td class="income">0.00</td>
+          <td class="return">0.00</td>
+        </tr>
+        <tr>
+          <td class="bet">0.00</td>
+          <td><input type="number" class="coef" value="9.44" /></td>
+          <td class="income">0.00</td>
+          <td class="return">0.00</td>
+        </tr>
+        <tr>
+          <td class="bet">0.00</td>
+          <td><input type="number" class="coef" value="1.37" /></td>
+          <td class="income">0.00</td>
+          <td class="return">0.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="profit" id="profitPercent">Lucro: 0%</div>
+
+    <div class="button-group">
+      <button onclick="addRow()">+ Aposta</button>
+      <button onclick="removeRow()">− Aposta</button>
+    </div>
+    <div style="text-align: center; margin-top: 15px;">
+      <button onclick="calculate()">Calcular</button>
+    </div>
+  </div>
+
+  <script>
+    function calculate() {
+      const totalBet = parseFloat(document.getElementById('totalBet').value) || 0;
+      const coefInputs = document.querySelectorAll('.coef');
+      const betCells = document.querySelectorAll('.bet');
+      const incomeCells = document.querySelectorAll('.income');
+      const returnCells = document.querySelectorAll('.return');
+
+      let odds = [];
+      for (let i = 0; i < coefInputs.length; i++) {
+        const val = parseFloat(coefInputs[i].value);
+        odds.push(isNaN(val) || val <= 0 ? 1 : val);
+      }
+
+      const inverseSum = odds.reduce((acc, odd) => acc + (1 / odd), 0);
+      let totalBets = [], profits = [];
+
+      for (let i = 0; i < odds.length; i++) {
+        const stake = (totalBet / odds[i]) / inverseSum;
+        totalBets.push(stake);
+      }
+
+      const totalDistributed = totalBets.reduce((acc, val) => acc + val, 0);
+
+      for (let i = 0; i < odds.length; i++) {
+        const odd = odds[i];
+        const stake = totalBets[i];
+        const gross = stake * odd;
+        const profit = gross - totalDistributed;
+
+        betCells[i].textContent = isNaN(stake) ? "0.00" : stake.toFixed(2);
+        incomeCells[i].textContent = isNaN(profit) ? "0.00" : profit.toFixed(2);
+        returnCells[i].textContent = isNaN(gross) ? "0.00" : gross.toFixed(2);
+
+        profits.push(isNaN(profit) ? 0 : profit);
+      }
+
+      const minProfit = Math.min(...profits);
+      const profitPercent = isNaN(minProfit) || totalDistributed === 0 ? 0 : (minProfit / totalDistributed) * 100;
+
+      document.getElementById('profitPercent').textContent = `Lucro: ${profitPercent.toFixed(2)}%`;
+    }
+
+    function addRow() {
+      const tbody = document.getElementById('bets');
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="bet">0.00</td>
+        <td><input type="number" class="coef" value="1.00" /></td>
+        <td class="income">0.00</td>
+        <td class="return">0.00</td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    function removeRow() {
+      const tbody = document.getElementById('bets');
+      if (tbody.rows.length > 1) {
+        tbody.removeChild(tbody.lastElementChild);
+      }
+    }
+
+    window.onload = calculate;
+  </script>
+</body>
+</html>
