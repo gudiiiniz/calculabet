@@ -4,14 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CalculaBet</title>
+
+  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Ícones e manifest -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="manifest" href="assets/site.webmanifest">
+
   <style>
     * {
       box-sizing: border-box;
     }
 
     body {
-      background-color: #121212;
+      background-color: #000000;
       font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 20px;
@@ -23,63 +32,73 @@
     }
 
     .container {
-      background-color: #1e1e1e;
-      padding: 30px 20px;
-      border-radius: 20px;
+      background-color: #0f0f0f;
+      padding: 25px 20px;
+      border-radius: 18px;
       width: 100%;
-      max-width: 550px;
-      box-shadow: 0 0 30px rgba(0,255,150,0.1);
+      max-width: 500px;
+      box-shadow: 0 0 25px rgba(0,255,150,0.1);
       transition: 0.3s ease;
     }
 
     h1 {
       text-align: center;
-      color: #00ff99;
-      margin-bottom: 25px;
+      color: #aae4b8;
+      margin-bottom: 22px;
       font-size: 24px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 18px;
     }
 
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: 600;
+      text-align: center;
     }
 
-    input[type="number"] {
-      width: 100%;
-      padding: 12px;
+    #totalBet {
+      width: 200px;
+      padding: 10px;
       border-radius: 10px;
       border: none;
       background-color: #2a2a2a;
       color: white;
-      font-size: 16px;
-      margin-bottom: 20px;
+      font-size: 15px;
+      margin-bottom: 15px;
       transition: 0.2s ease;
+      text-align: center;
     }
 
     input[type="number"]:focus {
-      outline: 2px solid #00ff99;
+      outline: 2px solid #aae4b8;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     th, td {
-      padding: 10px;
+      padding: 10px 6px;
       text-align: center;
+      font-size: 15px;
     }
 
     th {
-      color: #00ff99;
+      color: #aae4b8;
       font-weight: 600;
     }
 
-    td input {
-      width: 100%;
-      padding: 8px;
+    td input.coef {
+      width: 75px; 
+      padding: 6px;
       border-radius: 8px;
       background-color: #2a2a2a;
       color: white;
@@ -88,21 +107,16 @@
       font-size: 14px;
     }
 
-    .bet {
-      color: #00ffaa;
-      font-weight: bold;
-    }
-
-    .income {
-      color: #00ff99;
+    .bet, .income {
+      color: #aae4b8;
       font-weight: bold;
     }
 
     .profit {
       text-align: center;
       font-size: 18px;
-      margin-top: 10px;
-      color: #00ff99;
+      margin: 12px 0;
+      color: #aae4b8;
       font-weight: 600;
     }
 
@@ -111,31 +125,42 @@
       border: none;
       border-radius: 10px;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
-      background-color: #00ff99;
+      background-color: #aae4b8;
       color: #121212;
       transition: background 0.2s ease;
     }
 
     button:hover {
-      background-color: #00cc7a;
+      background-color: #8dd19b;
     }
 
     .button-group {
       display: flex;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       justify-content: center;
     }
 
-    .button-group button {
-      flex: 1;
+    .circle-button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 20px;
+    }
+
+    .calculate-button {
+      padding: 12px 40px;
     }
 
     @media (max-width: 480px) {
       .container {
-        padding: 20px 15px;
+        padding: 18px 15px;
       }
 
       h1 {
@@ -144,11 +169,26 @@
 
       button {
         font-size: 14px;
+        padding: 10px;
+      }
+
+      .circle-button {
+        width: 35px;
+        height: 35px;
       }
 
       th, td {
-        padding: 6px;
+        padding: 6px 4px;
         font-size: 14px;
+      }
+
+      td input.coef {
+        width: 65px;
+        padding: 5px;
+      }
+
+      #totalBet {
+        width: 180px;
       }
     }
   </style>
@@ -156,8 +196,10 @@
 <body>
   <div class="container">
     <h1>Calcula Bet</h1>
-    <label for="totalBet">Total apostado</label>
-    <input type="number" id="totalBet" aria-label="Total apostado" />
+    <div class="input-group">
+      <label for="totalBet">Total apostado</label>
+      <input type="number" id="totalBet" aria-label="Total apostado" />
+    </div>
 
     <table>
       <thead>
@@ -171,19 +213,19 @@
       <tbody id="bets">
         <tr>
           <td class="bet">0.00</td>
-          <td><input type="number" class="coef" value="6.84" /></td>
+          <td><input type="number" class="coef" /></td>
           <td class="income">0.00</td>
           <td class="return">0.00</td>
         </tr>
         <tr>
           <td class="bet">0.00</td>
-          <td><input type="number" class="coef" value="9.44" /></td>
+          <td><input type="number" class="coef" /></td>
           <td class="income">0.00</td>
           <td class="return">0.00</td>
         </tr>
         <tr>
           <td class="bet">0.00</td>
-          <td><input type="number" class="coef" value="1.37" /></td>
+          <td><input type="number" class="coef" /></td>
           <td class="income">0.00</td>
           <td class="return">0.00</td>
         </tr>
@@ -193,11 +235,11 @@
     <div class="profit" id="profitPercent">Lucro: 0%</div>
 
     <div class="button-group">
-      <button onclick="addRow()">+ Aposta</button>
-      <button onclick="removeRow()">− Aposta</button>
+      <button onclick="removeRow()" class="circle-button">−</button>
+      <button onclick="addRow()" class="circle-button">+</button>
     </div>
     <div style="text-align: center; margin-top: 15px;">
-      <button onclick="calculate()">Calcular</button>
+      <button onclick="calculate()" class="calculate-button">Calcular</button>
     </div>
   </div>
 
@@ -249,7 +291,7 @@
       const row = document.createElement('tr');
       row.innerHTML = `
         <td class="bet">0.00</td>
-        <td><input type="number" class="coef" value="1.00" /></td>
+        <td><input type="number" class="coef" /></td>
         <td class="income">0.00</td>
         <td class="return">0.00</td>
       `;
