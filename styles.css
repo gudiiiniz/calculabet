@@ -12,6 +12,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-y: hidden;
 }
 
 .background-overlay {
@@ -301,4 +302,12 @@ input[type=number]::-webkit-inner-spin-button {
   th, td { font-size: 13px; padding: 10px 5px; }
   .bet-input, .coef { width: 70px; padding: 6px; font-size: 14px; }
   .profit { font-size: 18px; }
+}
+
+@media (max-width: 768px) {
+  html, body {
+    overflow-y: hidden;
+    overscroll-behavior: none;
+    height: 100vh;
+  }
 }

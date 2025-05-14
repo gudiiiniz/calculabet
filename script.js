@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><input type="number" class="bet-input" min="0" step="0.01" placeholder="0.00" data-auto="true"/></td>
-      <td><input type="number" class="coef" min="1.01" step="0.01" placeholder="2.00"/></td>
+      <td><input type="number" class="coef" min="1.01" step="0.01" placeholder=""/></td>
       <td class="income">0.00</td>
       <td class="return">0.00</td>
     `;
