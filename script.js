@@ -109,25 +109,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.matches('.bet-input')) e.target.dataset.auto = "false";
   });
 
-  // novo: captura Tab para pular só a linha mantendo a coluna
-  betsTbody.addEventListener('keydown', e => {
-    if (e.key === 'Tab' && !e.shiftKey) {
-      const curr = e.target;
-      if (curr.matches('.bet-input, .coef')) {
+betsTbody.addEventListener('keydown', e => {
+  if (e.key === 'Tab' && !e.shiftKey && e.target.matches('.bet-input, .coef')) {
+    const curr   = e.target;
+    const column = curr.classList.contains('bet-input') ? 'bet-input' : 'coef';
+    const cells  = [...betsTbody.querySelectorAll(`.${column}`)];
+    const idx    = cells.indexOf(curr);
+
+    if (idx < cells.length - 1) {
+      e.preventDefault();
+      const next = cells[idx + 1];
+      next.focus();
+      next.select();
+    }
+    else if (column === 'bet-input') {
+      const nextCol = [...betsTbody.querySelectorAll('.coef')];
+      if (nextCol.length) {
         e.preventDefault();
-        const row = curr.closest('tr');
-        const nextRow = row.nextElementSibling;
-        if (nextRow) {
-          const selector = curr.classList.contains('coef') ? '.coef' : '.bet-input';
-          const nextInput = nextRow.querySelector(selector);
-          if (nextInput) {
-            nextInput.focus();
-            nextInput.select();
-          }
-        }
+        nextCol[0].focus();
+        nextCol[0].select();
       }
     }
-  });
+  }
+});
+
+
 
   addRowBtn.addEventListener('click', () => {
     if (betsTbody.rows.length < 10) {
