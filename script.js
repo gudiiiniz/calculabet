@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     tr.innerHTML = `
       <td><input type="number" class="bet-input" min="0" step="0.01" placeholder="0.00" data-auto="true"/></td>
       <td><input type="number" class="coef" min="1.01" step="0.01" placeholder=""/></td>
-      <td class="income">0.00</td>
       <td class="return">0.00</td>
+      <td class="income">0.00</td>
     `;
     tr.style.opacity = 0;
     tr.style.transform = 'translateY(10px)';
@@ -39,11 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const calculate = () => {
     const total = parseFloat(totalBetInput.value) || 0;
     const odds  = getOdds();
-    const invSum = odds.reduce((a,b) => a + 1/b, 0);
+    const invSum = odds.reduce((a, b) => a + 1 / b, 0);
     const stakes = odds.map(o => total / o / invSum);
-    const totalDist = stakes.reduce((a,b) => a + b, 0);
+    const totalDist = stakes.reduce((a, b) => a + b, 0);
 
-    stakes.forEach((s,i) => {
+    stakes.forEach((s, i) => {
       const row = betsTbody.rows[i];
       const inBet = row.querySelector('.bet-input');
       animate(inBet, s);
@@ -52,19 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
       animate(row.querySelector('.return'), s * odds[i]);
     });
 
-    const minProfit = Math.min(...stakes.map((s,i) => s*odds[i] - totalDist));
+    const minProfit = Math.min(...stakes.map((s, i) => s * odds[i] - totalDist));
     const pct = totalDist ? (minProfit / totalDist) * 100 : 0;
     profitPercent.textContent = `Porcentagem: ${pct.toFixed(2)}%`;
-    profitPercent.style.color = pct>0 ? '#4cf392' : pct<0 ? '#e74c3c' : '#fff';
+    profitPercent.style.color = pct > 0 ? '#4cf392' : pct < 0 ? '#e74c3c' : '#fff';
   };
 
   const update = () => {
-    const odds  = getOdds();
-    const invSum = odds.reduce((a,b) => a + 1/b, 0);
+    const odds = getOdds();
+    const invSum = odds.reduce((a, b) => a + 1 / b, 0);
     const inputs = [...betsTbody.querySelectorAll('.bet-input')];
     const manual = inputs
-      .map((inp,i) => inp.dataset.auto==='false' ? i : -1)
-      .filter(i => i>=0);
+      .map((inp, i) => inp.dataset.auto === 'false' ? i : -1)
+      .filter(i => i >= 0);
 
     if (!manual.length) return calculate();
 
@@ -75,19 +75,19 @@ document.addEventListener('DOMContentLoaded', () => {
     totalBetInput.value = newTotal.toFixed(2);
 
     const stakes = odds.map(o => newTotal / o / invSum);
-    const totalDist = stakes.reduce((a,b) => a + b, 0);
+    const totalDist = stakes.reduce((a, b) => a + b, 0);
 
-    stakes.forEach((s,i) => animate(inputs[i], s));
-    stakes.forEach((s,i) => {
+    stakes.forEach((s, i) => animate(inputs[i], s));
+    stakes.forEach((s, i) => {
       const row = betsTbody.rows[i];
       animate(row.querySelector('.income'), s * odds[i] - totalDist);
       animate(row.querySelector('.return'), s * odds[i]);
     });
 
-    const minProfit = Math.min(...stakes.map((s,i) => s*odds[i] - totalDist));
+    const minProfit = Math.min(...stakes.map((s, i) => s * odds[i] - totalDist));
     const pct = totalDist ? (minProfit / totalDist) * 100 : 0;
     profitPercent.textContent = `Porcentagem: ${pct.toFixed(2)}%`;
-    profitPercent.style.color = pct>0 ? '#4cf392' : pct<0 ? '#e74c3c' : '#fff';
+    profitPercent.style.color = pct > 0 ? '#4cf392' : pct < 0 ? '#e74c3c' : '#fff';
 
     inputs.forEach(i => i.dataset.auto = "true");
   };
@@ -108,17 +108,46 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.matches('.coef')) calculate();
     if (e.target.matches('.bet-input')) e.target.dataset.auto = "false";
   });
-  addRowBtn.addEventListener('click', () => {
-    if (betsTbody.rows.length < 10) { betsTbody.appendChild(createRow()); calculate(); }
+
+  // novo: captura Tab para pular só a linha mantendo a coluna
+  betsTbody.addEventListener('keydown', e => {
+    if (e.key === 'Tab' && !e.shiftKey) {
+      const curr = e.target;
+      if (curr.matches('.bet-input, .coef')) {
+        e.preventDefault();
+        const row = curr.closest('tr');
+        const nextRow = row.nextElementSibling;
+        if (nextRow) {
+          const selector = curr.classList.contains('coef') ? '.coef' : '.bet-input';
+          const nextInput = nextRow.querySelector(selector);
+          if (nextInput) {
+            nextInput.focus();
+            nextInput.select();
+          }
+        }
+      }
+    }
   });
+
+  addRowBtn.addEventListener('click', () => {
+    if (betsTbody.rows.length < 10) {
+      betsTbody.appendChild(createRow());
+      calculate();
+    }
+  });
+
   removeRowBtn.addEventListener('click', () => {
     if (betsTbody.rows.length > 1) {
       const last = betsTbody.lastElementChild;
       last.style.opacity = 0;
       last.style.transform = 'translateY(10px)';
-      setTimeout(() => { betsTbody.removeChild(last); calculate(); }, 300);
+      setTimeout(() => {
+        betsTbody.removeChild(last);
+        calculate();
+      }, 300);
     }
   });
+
   updateBtn.addEventListener('click', update);
   clearBtn.addEventListener('click', clearAll);
 
