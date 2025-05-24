@@ -133,8 +133,6 @@ betsTbody.addEventListener('keydown', e => {
   }
 });
 
-
-
   addRowBtn.addEventListener('click', () => {
     if (betsTbody.rows.length < 10) {
       betsTbody.appendChild(createRow());

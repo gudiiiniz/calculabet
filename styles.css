@@ -48,14 +48,9 @@ h1 {
 }
 
 .card {
-  background: rgba(25, 25, 25, 0.8);
-  backdrop-filter: blur(10px);
+  background: rgba(25, 25, 25, 0.5);
   border-radius: 18px;
   padding: 25px 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
-    0 1px 2px rgba(255, 255, 255, 0.05),
-    inset 0 1px 1px rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .input-group {
@@ -64,11 +59,6 @@ h1 {
   justify-content: center;
   margin-bottom: 25px;
   gap: 15px;
-}
-
-.input-group label {
-  font-size: 16px;
-  color: #e0e0e0;
 }
 
 .input-wrapper {
@@ -93,9 +83,6 @@ h1 {
   color: #fff;
   font-size: 16px;
   text-align: right;
-  font-family: 'Poppins', sans-serif;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-  transition: box-shadow 0.3s, background 0.3s;
 }
 
 #totalBet:focus {
@@ -223,11 +210,13 @@ td {
 #removeRowBtn {
   background: linear-gradient(135deg, #e74c3c, #c0392b);
 }
+
 #removeRowBtn:hover {
   background: linear-gradient(135deg, #e74c3c, #a52a2a);
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(231, 76, 60, 0.3);
 }
+
 #removeRowBtn:active {
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
@@ -237,11 +226,13 @@ td {
 #addRowBtn {
   background: linear-gradient(135deg, #4cf392, #259e58);
 }
+
 #addRowBtn:hover {
   background: linear-gradient(135deg, #4cf392, #1c7e40);
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(76, 243, 146, 0.3);
 }
+
 #addRowBtn:active {
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(76, 243, 146, 0.3);
@@ -251,11 +242,13 @@ td {
 #updateBtn {
   background: linear-gradient(135deg, #3498db, #2980b9);
 }
+
 #updateBtn:hover {
   background: linear-gradient(135deg, #3498db, #217dbb);
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(52, 152, 219, 0.3);
 }
+
 #updateBtn:active {
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
@@ -265,11 +258,13 @@ td {
 #clearBtn {
   background: linear-gradient(135deg, #f1c40f, #f39c12);
 }
+
 #clearBtn:hover {
   background: linear-gradient(135deg, #f1c40f, #e67e22);
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(241, 196, 15, 0.3);
 }
+
 #clearBtn:active {
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(241, 196, 15, 0.3);
@@ -289,17 +284,47 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 @media (max-width: 480px) {
-  h1 { font-size: 32px; }
-  .card { padding: 20px 15px; }
-  #totalBet { width: 80px; font-size: 14px; }
-  .circle-button { width: 45px; height: 45px; font-size: 20px; }
-  th, td { font-size: 13px; padding: 10px 5px; }
-  .bet-input, .coef { width: 70px; padding: 6px; font-size: 14px; }
-  .profit { font-size: 18px; }
+  h1 {
+    font-size: 32px;
+  }
+
+  .card {
+    padding: 20px 15px;
+  }
+
+  #totalBet {
+    width: 80px;
+    font-size: 14px;
+  }
+
+  .circle-button {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+
+  th,
+  td {
+    font-size: 13px;
+    padding: 10px 5px;
+  }
+
+  .bet-input,
+  .coef {
+    width: 70px;
+    padding: 6px;
+    font-size: 14px;
+  }
+
+  .profit {
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 768px) {
-  html, body {
+
+  html,
+  body {
     overflow-y: hidden;
     overscroll-behavior: none;
     height: 100vh;
